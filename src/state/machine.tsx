@@ -1,28 +1,4 @@
-import { createActor, createMachine } from 'xstate'
-
-// interface MachineInterface {
-//   id: string
-//   initial: string
-//   states: {
-//     mini: {
-//       on: {
-//         toggle: string
-//       }
-//     }
-//     full: {
-//       entry: string
-//       exit: string
-//       on: {
-//         toggle: string
-//         "key.escape": string
-//       }
-//     }
-//   }
-//   actions: {
-//     playVideo: () => void
-//     pauseVideo: () => void
-//   }
-// }
+import { createMachine } from 'xstate'
 
 const videoMachine = createMachine({
   id: 'videoPlayer',
@@ -30,28 +6,54 @@ const videoMachine = createMachine({
   states: {
     mini: {
       on: {
-        toggle: 'full',
+        OPEN: 'full',
       },
     },
     full: {
+      type: 'parallel',
+      states: {
+        format: {
+          initial: 'large',
+          states: {
+            large: {
+              on: {
+                TOGGLE: 'small',
+              },
+            },
+            small: {
+              on: {
+                TOGGLE: 'large',
+              },
+            },
+          },
+        },
+        play: {
+          initial: 'playing',
+          states: {
+            playing: {
+              entry: 'playVideo',
+              on: {
+                PAUSE: 'paused',
+              },
+            },
+            paused: {
+              entry: 'pauseVideo',
+              exit: 'pauseVideo',
+              on: {
+                PLAY: 'playing',
+              },
+            },
+          },
+        },
+      },
       entry: 'playVideo',
       exit: 'pauseVideo',
       on: {
-        'toggle': 'mini',
-        'key.escape': 'mini',
+        CLOSE: 'mini',
+        ESC: 'mini',
       },
     },
   },
-  // actions: {
-  //   playVideo: () => {
-  //     console.log("Playing video")
-  //   },
-  //   pauseVideo: () => {
-  //     console.log("Pausing video")
-  //   },
-  // },
 })
 
-const actor = createActor(videoMachine)
-actor.start()
-actor.send({ type: 'toggle' })
+export default videoMachine

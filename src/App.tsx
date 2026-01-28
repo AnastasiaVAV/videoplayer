@@ -1,10 +1,13 @@
 import './App.css'
 import VideoPlayer from './components/VideoPlayer'
+import VideoContext from './context/VideoContext'
 
 function App() {
   return (
     <>
-      <VideoPlayer />
+      <VideoContext.Provider>
+        <VideoPlayer />
+      </VideoContext.Provider>
     </>
   )
 }
