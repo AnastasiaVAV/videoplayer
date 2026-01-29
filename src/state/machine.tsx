@@ -1,8 +1,11 @@
-import { createMachine } from 'xstate'
+import { assign, createMachine } from 'xstate'
 
 const videoMachine = createMachine({
   id: 'videoPlayer',
   initial: 'mini',
+  context: {
+    isSmall: false,
+  },
   states: {
     mini: {
       on: {
@@ -10,45 +13,28 @@ const videoMachine = createMachine({
       },
     },
     full: {
-      type: 'parallel',
+      initial: 'playing',
       states: {
-        format: {
-          initial: 'large',
-          states: {
-            large: {
-              on: {
-                TOGGLE: 'small',
-              },
-            },
-            small: {
-              on: {
-                TOGGLE: 'large',
-              },
-            },
+        playing: {
+          on: {
+            PAUSE: 'paused',
           },
         },
-        play: {
-          initial: 'playing',
-          states: {
-            playing: {
-              entry: 'playVideo',
-              on: {
-                PAUSE: 'paused',
-              },
-            },
-            paused: {
-              entry: 'pauseVideo',
-              exit: 'pauseVideo',
-              on: {
-                PLAY: 'playing',
-              },
-            },
+        paused: {
+          on: {
+            PLAY: 'playing',
           },
         },
       },
+
       entry: 'playVideo',
       exit: 'pauseVideo',
       on: {
+        TOGGLE: {
+          actions: assign(({ context }) => ({
+            isSmall: !context.isSmall,
+          })),
+        },
         CLOSE: 'mini',
         ESC: 'mini',
       },

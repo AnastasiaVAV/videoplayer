@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal } from 'antd'
 import { Maximize2, Minimize2, Pause, Play, X } from 'lucide-react'
 import ReactPlayer from 'react-player'
@@ -53,12 +53,16 @@ const Footer: React.FC<FooterProps> = ({
 
 const ModalVideo: React.FC<Props> = ({ isModalOpen }) => {
   const actorRef = VideoContext.useActorRef()
-  const isPlaying = VideoContext.useSelector(state => state.matches({ full: { play: 'playing' } }))
-  const isSmall = VideoContext.useSelector(state => state.matches({ full: { format: 'small' } }))
+  const isPlaying = VideoContext.useSelector(state => state.matches({ full: 'playing' }))
+  const isSmall = VideoContext.useSelector(state => state.context.isSmall)
 
   const play = () => actorRef.send({ type: 'PLAY' })
   const pause = () => actorRef.send({ type: 'PAUSE' })
   const toggleFormat = () => actorRef.send({ type: 'TOGGLE' })
+
+  useEffect(() => {
+    if (isModalOpen && isSmall) toggleFormat()
+  }, [isModalOpen])
 
   const handleClose = () => {
     pause()
