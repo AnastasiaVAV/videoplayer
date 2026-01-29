@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# Видеоплеер с модальным окном
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Интерактивный видеоплеер с модальным окном, управлением воспроизведением и изменением размера. Позволяет просматривать видео как в режиме превью на странице, так и в полноэкранном модальном окне.
 
-Currently, two official plugins are available:
+## Особенности проекта
+- Управление воспроизведением (play/pause)
+- Изменение размера модального окна (мини/полный)
+- Автозапуск видео при открытии модалки
+- Автоматическая пауза при закрытии модалки
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Технологии
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![XState](https://img.shields.io/badge/XState-000000?style=for-the-badge&logo=xstate&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-## React Compiler
+**Библиотеки**
+- `react-player` – воспроизведение видео
+- `xstate` – управление состоянием приложения
+- `antd` (Ant Design) – UI компоненты
+- `lucide-react` – иконки
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Установка и запуск
+1. Клонируйте репозиторий
+2. Установите зависимости:
+    ```bash
+    make install
+    ```
+2. Запустите приложение в режиме разработки:
+    ```bash
+    make run
+    ```
+3. Откройте http://localhost:5173 в браузере.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Production сборка:
+```bash
+make build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Структура и описание проекта
+```
+src/
+├── components/
+│   ├── Modal.tsx          # Модальное окно с видеоплеером
+│   └── VideoPlayer.tsx    # Компонент-обертка для управления состоянием
+├── state/
+│   └── machine.tsx        # Машина состояний XState
+├── context/
+│   └── VideoContext.tsx   # Контекст для XState
+├── App.tsx                # Основной компонент приложения
 ```
