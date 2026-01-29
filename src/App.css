@@ -32,6 +32,15 @@
   gap: 10px;
 }
 
-.modal-footer__icon:hover {
+.modal-footer__button {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-footer__button:hover {
   color: #8585ff;
+  border-color: #8585ff;
 }

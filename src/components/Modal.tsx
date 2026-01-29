@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Modal } from 'antd'
-import { Maximize2, Minimize2, Pause, Play } from 'lucide-react'
+import { Modal } from 'antd'
+import { Maximize2, Minimize2, Pause, Play, X } from 'lucide-react'
 import ReactPlayer from 'react-player'
 import VideoContext from '../context/VideoContext'
 
@@ -28,25 +28,25 @@ const Footer: React.FC<FooterProps> = ({
   <div className="modal-footer">
     {format === 'mini'
       ? (
-          <Button key="full" onClick={() => toggleFormat()}>
-            <Maximize2 className="modal-footer__icon" size={16} />
-          </Button>
+          <button className="modal-footer__button" key="full" onClick={() => toggleFormat()}>
+            <Maximize2 size={16} />
+          </button>
         )
       : (
-          <Button key="mini" onClick={() => toggleFormat()}>
-            <Minimize2 className="modal-footer__icon" size={16} />
-          </Button>
+          <button className="modal-footer__button" key="mini" onClick={() => toggleFormat()}>
+            <Minimize2 size={16} />
+          </button>
         )}
     {isPlay
       ? (
-          <Button key="pause" onClick={pause}>
-            <Pause className="modal-footer__icon" size={16} />
-          </Button>
+          <button className="modal-footer__button" key="pause" onClick={pause}>
+            <Pause size={16} />
+          </button>
         )
       : (
-          <Button key="play" onClick={play}>
-            <Play className="modal-footer__icon" size={16} />
-          </Button>
+          <button className="modal-footer__button" key="play" onClick={play}>
+            <Play size={16} />
+          </button>
         )}
   </div>
 )
@@ -61,7 +61,7 @@ const ModalVideo: React.FC<Props> = ({ isModalOpen }) => {
   const toggleFormat = () => actorRef.send({ type: 'TOGGLE' })
 
   const handleClose = () => {
-    actorRef.send({ type: 'PAUSE' })
+    pause()
     setTimeout(() => actorRef.send({ type: 'CLOSE' }), 100)
   }
 
@@ -89,12 +89,11 @@ const ModalVideo: React.FC<Props> = ({ isModalOpen }) => {
 4691-a73f-a4e583391b3d/playlist.m3u8"
           playing={isPlaying}
           controls={false}
-          light={false}
           width="100%"
           height="100%"
           onPlay={play}
           onPause={pause}
-          onEnded={pause}
+          onEnded={handleClose}
         />
       </div>
     </Modal>
